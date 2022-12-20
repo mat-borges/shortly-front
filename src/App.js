@@ -9,6 +9,9 @@ function App() {
       <GlobalStyle />
       <Routes>
         <Route path='/' element={<Loading />} />
+        <Route path='/shortenUrl' element={<Loading />} />
+        <Route path='/signUp' element={<Loading />} />
+        <Route path='/signIn' element={<Loading />} />
       </Routes>
     </BrowserRouter>
   );
