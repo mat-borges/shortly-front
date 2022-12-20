@@ -48,7 +48,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	font-weight: 400;
-	font-family: 'Roboto Slab', serif;
+	font-family: 'Lexend Deca', sans-serif;
 	background-color: ${baseColor};
 }
 ol, ul {
