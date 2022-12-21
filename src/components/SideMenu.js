@@ -1,11 +1,4 @@
-import {
-  accentColor,
-  baseColor,
-  detailColor,
-  textAccentColor,
-  textBaseColor,
-  textDetailColor,
-} from '../constants/colors.js';
+import { accentColor, baseColor, detailColor, textAccentColor, textDetailColor } from '../constants/colors.js';
 import { useContext, useState } from 'react';
 
 import { GrMenu } from 'react-icons/gr';
@@ -72,6 +65,7 @@ const SideMenuBox = styled.div`
   align-items: center;
   position: relative;
 `;
+
 const MenuIcon = styled(GrMenu)`
   margin-right: 15px;
   color: ${accentColor};
@@ -85,6 +79,7 @@ const MenuIcon = styled(GrMenu)`
     display: none;
   }
 `;
+
 const SideMenu = styled.ul`
   display: ${(props) => (props.display === 'true' ? 'initial' : 'none')};
   position: absolute;

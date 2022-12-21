@@ -51,11 +51,20 @@ const LogoBox = styled.div`
   h1 {
     color: ${textBaseColor};
     font-weight: 200;
-    font-size: 4rem;
-    line-height: 4rem;
+    font-size: 3rem;
+    line-height: 3rem;
   }
   img {
-    height: 5.5rem;
+    height: 3.5rem;
     margin-left: 1rem;
+  }
+  @media (min-width: 660px) {
+    h1 {
+      font-size: 4rem;
+      line-height: 4rem;
+    }
+    img {
+      height: 5.5rem;
+    }
   }
 `;

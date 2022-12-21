@@ -50,6 +50,9 @@ body {
 	font-weight: 400;
 	font-family: 'Lexend Deca', sans-serif;
 	background-color: ${baseColor};
+	@media (min-width: 660px){
+		margin: 0 4rem;
+	}
 }
 ol, ul {
 	list-style: none;
