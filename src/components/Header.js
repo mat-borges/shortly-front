@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <HeaderContainer>
-      <WelcomeText>{userInfo?.loggedIn ? <h1>Seja bem-vinde, pessoa!</h1> : <></>}</WelcomeText>
+      <WelcomeText>{userInfo?.loggedIn ? <h1>Seja bem-vinde, {userInfo.name}!</h1> : <></>}</WelcomeText>
       <LogoBox>
         <h1 onClick={() => navigate('/')}>Shortly</h1>
         <img src={logo} alt='shortlyLogo' onClick={() => navigate('/')} />

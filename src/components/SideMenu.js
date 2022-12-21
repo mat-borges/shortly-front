@@ -36,21 +36,34 @@ export default function SideMenuComponent() {
     // });
   }
 
+  function handleMenu(e) {
+    navigate(`/${e.target.id}`);
+    setSideMenu(!sideMenu);
+  }
+
   return (
     <SideMenuBox>
       <MenuIcon size='1.2rem' color={accentColor} onClick={() => setSideMenu(!sideMenu)} />
       <SideMenu display={sideMenu ? 'true' : 'false'} hide={!userInfo?.loggedIn ? 'true' : 'false'}>
         <h1>
-          <li onClick={() => navigate('/')}>Home</li>
+          <li id='' onClick={handleMenu}>
+            Home
+          </li>
         </h1>
         <h2>
-          <li onClick={() => navigate('/signIn')}>Entrar</li>
+          <li id='signIn' onClick={handleMenu}>
+            Entrar
+          </li>
         </h2>
         <h2>
-          <li onClick={() => navigate('/signUp')}>Cadastrar-se</li>
+          <li id='signUp' onClick={handleMenu}>
+            Cadastrar-se
+          </li>
         </h2>
         <h1>
-          <li onClick={() => navigate('/')}>Ranking</li>
+          <li id='ranking' onClick={handleMenu}>
+            Ranking
+          </li>
         </h1>
         <h1>
           <li onClick={signOut}>Sair</li>
