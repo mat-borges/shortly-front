@@ -1,21 +1,29 @@
-import { accentColor, baseColor, detailColor, textAccentColor } from '../constants/colors.js';
+import {
+  accentColor,
+  baseColor,
+  detailColor,
+  textAccentColor,
+  textBaseColor,
+  textDetailColor,
+} from '../constants/colors.js';
+import { useContext, useState } from 'react';
 
 import { GrMenu } from 'react-icons/gr';
+import UserContext from '../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 export default function SideMenuComponent() {
   const navigate = useNavigate();
   const [sideMenu, setSideMenu] = useState(false);
-  const [userData, setUserData] = useState({ isLogged: false });
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   function signOut() {
     // const config = {
     //   headers: {
-    //     authorization: `Bearer ${userData.token}`,
+    //     authorization: `Bearer ${userInfo.token}`,
     //   },
     // };
     // swal('Log Out', 'Você tem certeza que deseja deslogar?', 'warning', { buttons: [true, true] }).then((res) => {
@@ -23,7 +31,7 @@ export default function SideMenuComponent() {
     //     axios
     //       .delete(`${process.env.REACT_APP_API_BASE_URL}/sign-out`, config)
     //       .then((res) => {
-    //         setUserData({});
+    //         setUserInfo({});
     //         localStorage.removeItem('userE-geek');
     //         swal({ text: 'Você foi deslogado com sucesso', icon: 'success' });
     //       })
@@ -38,7 +46,7 @@ export default function SideMenuComponent() {
   return (
     <SideMenuBox>
       <MenuIcon size='1.2rem' color={accentColor} onClick={() => setSideMenu(!sideMenu)} />
-      <SideMenu display={sideMenu ? 'true' : 'false'} hide={!userData?.isLogged ? 'true' : 'false'}>
+      <SideMenu display={sideMenu ? 'true' : 'false'} hide={!userInfo?.loggedIn ? 'true' : 'false'}>
         <h1>
           <li onClick={() => navigate('/')}>Home</li>
         </h1>
@@ -49,7 +57,7 @@ export default function SideMenuComponent() {
           <li onClick={() => navigate('/signUp')}>Cadastrar-se</li>
         </h2>
         <h1>
-          <li onClick={() => navigate('/ranking')}>Ranking</li>
+          <li onClick={() => navigate('/')}>Ranking</li>
         </h1>
         <h1>
           <li onClick={signOut}>Sair</li>
@@ -72,6 +80,9 @@ const MenuIcon = styled(GrMenu)`
   transition: all 0.5s;
   :hover {
     transform: rotate(180deg);
+  }
+  @media (min-width: 660px) {
+    display: none;
   }
 `;
 const SideMenu = styled.ul`
@@ -112,5 +123,40 @@ const SideMenu = styled.ul`
   }
   h1 {
     display: ${(props) => (props.hide === 'true' ? 'none' : 'inherit')};
+  }
+  @media (min-width: 660px) {
+    display: flex;
+    position: initial;
+    width: fit-content;
+    min-width: auto;
+    max-width: auto;
+    background-color: ${baseColor};
+    border: none;
+    box-shadow: none;
+    li {
+      width: fit-content;
+      color: ${textDetailColor};
+      border: none;
+      text-transform: none;
+    }
+    h1,
+    h2 {
+      border: none;
+    }
+    h2 {
+      :first-of-type {
+        li {
+          color: ${accentColor};
+        }
+      }
+    }
+    h1 {
+      :last-of-type {
+        li {
+          text-decoration: underline;
+          font-weight: bold;
+        }
+      }
+    }
   }
 `;
