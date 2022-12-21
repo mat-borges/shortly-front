@@ -35,7 +35,7 @@ export default function RankingPage() {
         {loading ? (
           <Loading />
         ) : (
-          rankings.map((ranking, i) => {
+          rankings?.map((ranking, i) => {
             return (
               <li key={i}>
                 <h2>
