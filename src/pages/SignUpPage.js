@@ -128,6 +128,9 @@ const SignUp = styled.form`
     }
   }
   @media (min-width: 660px) {
+    input {
+      width: 80%;
+    }
     button[type='submit'] {
       width: 20%;
       font-size: 0.8rem;
