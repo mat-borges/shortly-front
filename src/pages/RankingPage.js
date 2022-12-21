@@ -100,6 +100,7 @@ const Rankings = styled.ul`
   border: 1px solid #78b15940;
   border-radius: 2rem 2rem 0 0;
   box-shadow: 0px 4px 24px rgba(120, 177, 89, 0.12);
+  background-color: #f0f0f0;
   li {
     display: inline-flex;
     flex-direction: column;
