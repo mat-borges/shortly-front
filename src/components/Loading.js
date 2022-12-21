@@ -21,6 +21,7 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: calc(80vh - 80px);
+  width: 100%;
+  height: 100%;
+  padding: 7rem;
 `;

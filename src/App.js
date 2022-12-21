@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage.js';
 import Loading from './components/Loading.js';
 import RankingPage from './pages/RankingPage.js';
 import ShortenUrlPage from './pages/ShortenUrlPage.js';
+import SignUpPage from './pages/SignUpPage.js';
 import { UserProvider } from './contexts/UserContext.js';
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/ranking' element={<RankingPage />} />
           <Route path='/shortenUrl' element={<ShortenUrlPage />} />
-          <Route path='/signUp' element={<Loading />} />
+          <Route path='/signUp' element={<SignUpPage />} />
           <Route path='/signIn' element={<Loading />} />
         </Routes>
       </UserProvider>

@@ -61,6 +61,7 @@ export default function ShortenUrlPage() {
           placeholder='Links que cabem no bolso'
           onChange={(e) => setForm(e.target.value)}
           disabled={shortening ? 'disabled' : ''}
+          required
         />
         <button type='submit' disabled={shortening ? 'disabled' : ''}>
           {shortening ? <ThreeDots color={textAccentColor} width='60' /> : 'Encurtar Link'}

@@ -37,7 +37,7 @@ export default function RankingPage() {
         ) : (
           rankings.map((ranking, i) => {
             return (
-              <li>
+              <li key={i}>
                 <h2>
                   {i + 1} . {ranking.name}
                 </h2>
