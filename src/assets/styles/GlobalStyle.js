@@ -47,6 +47,7 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+	font-size: 14px;
 	font-weight: 400;
 	font-family: 'Lexend Deca', sans-serif;
 	background-color: ${baseColor};

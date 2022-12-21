@@ -4,6 +4,8 @@ import GlobalStyle from './assets/styles/GlobalStyle.js';
 import Header from './components/Header.js';
 import HomePage from './pages/HomePage.js';
 import Loading from './components/Loading.js';
+import RankingPage from './pages/RankingPage.js';
+import ShortenUrlPage from './pages/ShortenUrlPage.js';
 import { UserProvider } from './contexts/UserContext.js';
 
 function App() {
@@ -14,7 +16,8 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/shortenUrl' element={<Loading />} />
+          <Route path='/ranking' element={<RankingPage />} />
+          <Route path='/shortenUrl' element={<ShortenUrlPage />} />
           <Route path='/signUp' element={<Loading />} />
           <Route path='/signIn' element={<Loading />} />
         </Routes>
