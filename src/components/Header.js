@@ -5,15 +5,18 @@ import UserContext from '../contexts/UserContext.js';
 import logo from '../assets/images/logo.svg';
 import styled from 'styled-components';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
+  const navigate = useNavigate();
+
   return (
     <HeaderContainer>
       <WelcomeText>{userInfo?.loggedIn ? <h1>Seja bem-vinde, pessoa!</h1> : <></>}</WelcomeText>
       <LogoBox>
-        <h1>Shortly</h1>
-        <img src={logo} alt='shortlyLogo' />
+        <h1 onClick={() => navigate('/')}>Shortly</h1>
+        <img src={logo} alt='shortlyLogo' onClick={() => navigate('/')} />
       </LogoBox>
       <SideMenuComponent />
     </HeaderContainer>
@@ -53,10 +56,12 @@ const LogoBox = styled.div`
     font-weight: 200;
     font-size: 3rem;
     line-height: 3rem;
+    cursor: pointer;
   }
   img {
     height: 3.5rem;
     margin-left: 1rem;
+    cursor: pointer;
   }
   @media (min-width: 660px) {
     h1 {
