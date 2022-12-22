@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 
 import { FaTrophy } from 'react-icons/fa';
-import Loading from '../components/Loading.js';
-import UserContext from '../contexts/UserContext.js';
+import Loading from '../../components/Loading.js';
+import UserContext from '../../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
 

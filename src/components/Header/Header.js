@@ -1,19 +1,25 @@
-import { detailColor, textBaseColor } from '../constants/colors.js';
+import { detailColor, textBaseColor } from '../../constants/colors.js';
+import { useContext, useEffect } from 'react';
 
 import SideMenuComponent from './SideMenu.js';
-import UserContext from '../contexts/UserContext.js';
-import logo from '../assets/images/logo.svg';
+import UserContext from '../../contexts/UserContext.js';
+import logo from '../../assets/images/logo.svg';
 import styled from 'styled-components';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.name && localStorage.token) {
+      setUserInfo({ token: localStorage.token, name: localStorage.name, loggedIn: true });
+    }
+  }, [setUserInfo]);
 
   return (
     <HeaderContainer>
-      <WelcomeText>{userInfo?.loggedIn ? <h1>Seja bem-vinde, {userInfo.name}!</h1> : <></>}</WelcomeText>
+      <WelcomeText>{userInfo?.loggedIn ? <h1>Seja bem-vinde, {localStorage.name}!</h1> : <></>}</WelcomeText>
       <LogoBox>
         <h1 onClick={() => navigate('/')}>Shortly</h1>
         <img src={logo} alt='shortlyLogo' onClick={() => navigate('/')} />

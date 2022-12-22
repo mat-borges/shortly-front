@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import GlobalStyle from './assets/styles/GlobalStyle.js';
-import Header from './components/Header.js';
-import HomePage from './pages/HomePage.js';
-import RankingPage from './pages/RankingPage.js';
-import ShortenUrlPage from './pages/ShortenUrlPage.js';
-import SignInPage from './pages/SignInPage.js';
-import SignUpPage from './pages/SignUpPage.js';
+import Header from './components/Header/Header.js';
+import HomePage from './pages/HomePage/HomePage.js';
+import RankingPage from './pages/RankingPage/RankingPage.js';
+import ShortenUrlPage from './pages/ShortenUrlPage/ShortenUrlPage.js';
+import SignInPage from './pages/SignInPage/SignInPage.js';
+import SignUpPage from './pages/SignUpPage/SignUpPage.js';
 import { UserProvider } from './contexts/UserContext.js';
 
 function App() {

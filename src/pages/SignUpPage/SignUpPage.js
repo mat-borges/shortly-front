@@ -1,46 +1,29 @@
-import { detailColor, textAccentColor, textDetailColor } from '../constants/colors';
-import { useContext, useEffect, useState } from 'react';
+import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
 
 import { ThreeDots } from 'react-loader-spinner';
-import UserContext from '../contexts/UserContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-export default function SignInPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [singingIn, setSigningIn] = useState(false);
-  const { userInfo, setUserInfo } = useContext(UserContext);
+export default function SignUpPage() {
   const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [registering, setRegistering] = useState(false);
 
-  useEffect(() => {
-    if (userInfo.loggedIn === true) {
-      navigate('/');
-    } else if (localStorage.token) {
-      setUserInfo({ token: localStorage.token, name: localStorage.name, loggedIn: true });
-      navigate('/');
-    }
-  }, [userInfo.loggedIn, navigate]);
-
-  function signIn(e) {
-    if (e) {
-      e.preventDefault();
-    }
-    setSigningIn(true);
+  function signUp(e) {
+    e.preventDefault();
+    setRegistering(true);
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/signIn`, form)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/signUp`, form)
       .then((res) => {
-        const { token, user_id, name, email } = res.data;
-        setUserInfo({ token, user_id, name, email, loggedIn: true });
-        setSigningIn(false);
-        localStorage.setItem('token', token);
-        localStorage.setItem('name', name);
-        swal('Você está logado', { icon: 'success' });
+        swal('Sucesso', 'Usuário cadastrado com sucesso!', 'success');
+        setRegistering(false);
         navigate('/');
       })
       .catch((err) => {
-        setSigningIn(false);
+        setRegistering(false);
         console.log(err);
       });
   }
@@ -50,15 +33,24 @@ export default function SignInPage() {
   }
 
   return (
-    <SignInContainer>
-      <SignIn onSubmit={signIn}>
+    <SignUpContainer>
+      <SignUp onSubmit={signUp}>
+        <input
+          type='text'
+          name='name'
+          placeholder='Nome'
+          value={form.name}
+          onChange={handleForm}
+          disabled={registering ? 'disabled' : ''}
+          required
+        />
         <input
           type='email'
           name='email'
           placeholder='E-mail'
           value={form.email}
           onChange={handleForm}
-          disabled={singingIn ? 'disabled' : ''}
+          disabled={registering ? 'disabled' : ''}
           required
         />
         <input
@@ -67,18 +59,27 @@ export default function SignInPage() {
           placeholder='Senha'
           value={form.password}
           onChange={handleForm}
-          disabled={singingIn ? 'disabled' : ''}
+          disabled={registering ? 'disabled' : ''}
           required
         />
-        <button type='submit' disabled={singingIn ? 'disabled' : ''}>
-          {singingIn ? <ThreeDots color={textAccentColor} width='60' /> : 'Entrar'}
+        <input
+          type='password'
+          name='confirmPassword'
+          placeholder='Confirmar Senha'
+          value={form.confirmPassword}
+          onChange={handleForm}
+          disabled={registering ? 'disabled' : ''}
+          required
+        />
+        <button type='submit' disabled={registering ? 'disabled' : ''}>
+          {registering ? <ThreeDots color={textAccentColor} width='60' /> : 'Criar Conta'}
         </button>
-      </SignIn>
-    </SignInContainer>
+      </SignUp>
+    </SignUpContainer>
   );
 }
 
-const SignInContainer = styled.div`
+const SignUpContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -88,7 +89,7 @@ const SignInContainer = styled.div`
   }
 `;
 
-const SignIn = styled.form`
+const SignUp = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;

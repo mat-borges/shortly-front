@@ -1,29 +1,46 @@
-import { detailColor, textAccentColor, textDetailColor } from '../constants/colors';
+import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
+import { useContext, useEffect, useState } from 'react';
 
 import { ThreeDots } from 'react-loader-spinner';
+import UserContext from '../../contexts/UserContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
-export default function SignUpPage() {
+export default function SignInPage() {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [singingIn, setSigningIn] = useState(false);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
-  const [registering, setRegistering] = useState(false);
 
-  function signUp(e) {
-    e.preventDefault();
-    setRegistering(true);
+  useEffect(() => {
+    if (userInfo.loggedIn === true) {
+      navigate('/');
+    } else if (localStorage.token) {
+      setUserInfo({ token: localStorage.token, name: localStorage.name, loggedIn: true });
+      navigate('/');
+    }
+  }, [userInfo.loggedIn, navigate, setUserInfo]);
+
+  function signIn(e) {
+    if (e) {
+      e.preventDefault();
+    }
+    setSigningIn(true);
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/signUp`, form)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/signIn`, form)
       .then((res) => {
-        swal('Sucesso', 'Usuário cadastrado com sucesso!', 'success');
-        setRegistering(false);
+        const { token, user_id, name, email } = res.data;
+        setUserInfo({ token, user_id, name, email, loggedIn: true });
+        setSigningIn(false);
+        localStorage.setItem('token', token);
+        localStorage.setItem('name', name);
+        swal('Você está logado', { icon: 'success' });
         navigate('/');
       })
       .catch((err) => {
-        setRegistering(false);
+        setSigningIn(false);
         console.log(err);
       });
   }
@@ -33,24 +50,15 @@ export default function SignUpPage() {
   }
 
   return (
-    <SignUpContainer>
-      <SignUp onSubmit={signUp}>
-        <input
-          type='text'
-          name='name'
-          placeholder='Nome'
-          value={form.name}
-          onChange={handleForm}
-          disabled={registering ? 'disabled' : ''}
-          required
-        />
+    <SignInContainer>
+      <SignIn onSubmit={signIn}>
         <input
           type='email'
           name='email'
           placeholder='E-mail'
           value={form.email}
           onChange={handleForm}
-          disabled={registering ? 'disabled' : ''}
+          disabled={singingIn ? 'disabled' : ''}
           required
         />
         <input
@@ -59,27 +67,18 @@ export default function SignUpPage() {
           placeholder='Senha'
           value={form.password}
           onChange={handleForm}
-          disabled={registering ? 'disabled' : ''}
+          disabled={singingIn ? 'disabled' : ''}
           required
         />
-        <input
-          type='password'
-          name='confirmPassword'
-          placeholder='Confirmar Senha'
-          value={form.confirmPassword}
-          onChange={handleForm}
-          disabled={registering ? 'disabled' : ''}
-          required
-        />
-        <button type='submit' disabled={registering ? 'disabled' : ''}>
-          {registering ? <ThreeDots color={textAccentColor} width='60' /> : 'Criar Conta'}
+        <button type='submit' disabled={singingIn ? 'disabled' : ''}>
+          {singingIn ? <ThreeDots color={textAccentColor} width='60' /> : 'Entrar'}
         </button>
-      </SignUp>
-    </SignUpContainer>
+      </SignIn>
+    </SignInContainer>
   );
 }
 
-const SignUpContainer = styled.div`
+const SignInContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,7 +88,7 @@ const SignUpContainer = styled.div`
   }
 `;
 
-const SignUp = styled.form`
+const SignIn = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;

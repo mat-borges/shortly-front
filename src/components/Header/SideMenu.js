@@ -1,8 +1,8 @@
-import { accentColor, baseColor, detailColor, textAccentColor, textDetailColor } from '../constants/colors.js';
+import { accentColor, baseColor, detailColor, textAccentColor, textDetailColor } from '../../constants/colors.js';
 import { useContext, useState } from 'react';
 
 import { GrMenu } from 'react-icons/gr';
-import UserContext from '../contexts/UserContext.js';
+import UserContext from '../../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
@@ -16,7 +16,7 @@ export default function SideMenuComponent() {
   function signOut() {
     const config = {
       headers: {
-        authorization: `Bearer ${userInfo.token}`,
+        authorization: `Bearer ${localStorage.token}`,
       },
     };
     swal('Log Out', 'Certeza que deseja deslogar?', 'warning', { buttons: [true, true] }).then((res) => {
