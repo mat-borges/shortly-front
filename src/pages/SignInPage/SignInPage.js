@@ -1,4 +1,4 @@
-import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
+import { detailColor, textAccentColor, textBaseColor, textDetailColor } from '../../constants/colors';
 import { useContext, useEffect, useState } from 'react';
 
 import { ThreeDots } from 'react-loader-spinner';
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 export default function SignInPage() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [singingIn, setSigningIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { userInfo, setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -41,12 +42,26 @@ export default function SignInPage() {
       })
       .catch((err) => {
         setSigningIn(false);
+        handleError(err.response);
         console.log(err);
       });
   }
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  function handleError(error) {
+    console.log(error);
+    switch (error?.status) {
+      case 401:
+        swal(`${error.data.message}`, `${error.status} ${error.statusText}`, {
+          icon: 'error',
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   return (
@@ -62,7 +77,7 @@ export default function SignInPage() {
           required
         />
         <input
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           name='password'
           placeholder='Senha'
           value={form.password}
@@ -70,6 +85,12 @@ export default function SignInPage() {
           disabled={singingIn ? 'disabled' : ''}
           required
         />
+        <Password>
+          <div>
+            <input type='checkbox' id='showpassword' onChange={() => setShowPassword(!showPassword)} />
+            <label htmlFor='showpassword'>Show Password</label>
+          </div>
+        </Password>
         <button type='submit' disabled={singingIn ? 'disabled' : ''}>
           {singingIn ? <ThreeDots color={textAccentColor} width='60' /> : 'Entrar'}
         </button>
@@ -134,5 +155,35 @@ const SignIn = styled.form`
       width: 20%;
       font-size: 0.8rem;
     }
+  }
+`;
+
+const Password = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 1em;
+    margin: 0.3rem;
+    color: ${textBaseColor};
+    input[type='checkbox'] {
+      display: block;
+      height: 1em;
+      width: 1em;
+      margin: 0;
+      margin-right: 10px;
+      box-shadow: none;
+      border: none;
+    }
+    label {
+      font-size: 0.8em;
+    }
+  }
+  @media (min-width: 660px) {
+    width: 80%;
   }
 `;
