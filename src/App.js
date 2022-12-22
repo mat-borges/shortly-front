@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalStyle from './assets/styles/GlobalStyle.js';
 import Header from './components/Header/Header.js';
 import HomePage from './pages/HomePage/HomePage.js';
+import OpenShortUrl from './components/OpenShortUrl.js';
 import RankingPage from './pages/RankingPage/RankingPage.js';
 import ShortenUrlPage from './pages/ShortenUrlPage/ShortenUrlPage.js';
 import SignInPage from './pages/SignInPage/SignInPage.js';
@@ -21,6 +22,7 @@ function App() {
           <Route path='/shortenUrl' element={<ShortenUrlPage />} />
           <Route path='/signUp' element={<SignUpPage />} />
           <Route path='/signIn' element={<SignInPage />} />
+          <Route path='/:shortUrl' element={<OpenShortUrl />} />
         </Routes>
       </UserProvider>
     </BrowserRouter>
