@@ -19,6 +19,7 @@ export default function SideMenuComponent() {
         authorization: `Bearer ${localStorage.token}`,
       },
     };
+    setSideMenu(!sideMenu);
     swal('Log Out', 'Certeza que deseja deslogar?', 'warning', { buttons: [true, true] }).then((res) => {
       if (res) {
         axios
