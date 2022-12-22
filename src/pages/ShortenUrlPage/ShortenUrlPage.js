@@ -30,13 +30,14 @@ export default function ShortenUrlPage() {
         .then((res) => {
           setLoading(false);
           setUrls(res.data.shortenedUrls);
+          navigate('/shortenUrl');
         })
         .catch((err) => {
           setLoading(false);
           console.log(err);
         });
     }
-  }, [userInfo, navigate, shortening, deleting]);
+  }, [navigate, shortening, deleting]);
 
   function shortenUrl(e) {
     e.preventDefault();

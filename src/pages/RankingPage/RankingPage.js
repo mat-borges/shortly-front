@@ -5,11 +5,13 @@ import Loading from '../../components/Loading.js';
 import UserContext from '../../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export default function RankingPage() {
   const { userInfo } = useContext(UserContext);
   const [rankings, setRankings] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -18,12 +20,13 @@ export default function RankingPage() {
       .then((res) => {
         setLoading(false);
         setRankings(res.data);
+        navigate('/ranking');
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
       });
-  }, []);
+  }, [navigate]);
 
   return (
     <RankingContainer>
