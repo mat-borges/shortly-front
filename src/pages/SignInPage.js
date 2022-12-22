@@ -1,5 +1,5 @@
 import { detailColor, textAccentColor, textDetailColor } from '../constants/colors';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { ThreeDots } from 'react-loader-spinner';
 import UserContext from '../contexts/UserContext';
@@ -14,15 +14,28 @@ export default function SignInPage() {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (userInfo.loggedIn === true) {
+      navigate('/');
+    } else if (localStorage.token) {
+      setUserInfo({ token: localStorage.token, name: localStorage.name, loggedIn: true });
+      navigate('/');
+    }
+  }, [userInfo.loggedIn, navigate]);
+
   function signIn(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
     setSigningIn(true);
     axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/signIn`, form)
       .then((res) => {
-        console.log(res.data);
-        setUserInfo({ ...userInfo, token: res.data.token, name: res.data.name, loggedIn: true });
+        const { token, user_id, name, email } = res.data;
+        setUserInfo({ token, user_id, name, email, loggedIn: true });
         setSigningIn(false);
+        localStorage.setItem('token', token);
+        localStorage.setItem('name', name);
         swal('Você está logado', { icon: 'success' });
         navigate('/');
       })
