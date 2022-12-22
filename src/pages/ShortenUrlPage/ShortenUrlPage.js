@@ -1,6 +1,7 @@
 import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
 import { useContext, useEffect, useState } from 'react';
 
+import Loading from '../../components/Loading';
 import { ThreeDots } from 'react-loader-spinner';
 import Urls from './Urls.js';
 import UserContext from '../../contexts/UserContext';
@@ -16,18 +17,22 @@ export default function ShortenUrlPage() {
   const [shortening, setShortening] = useState(false);
   const [urls, setUrls] = useState([]);
   const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!localStorage.token) {
       navigate('/');
     } else {
       const config = { headers: { authorization: `Bearer ${localStorage.token}` } };
+      setLoading(true);
       axios
         .get(`${process.env.REACT_APP_API_BASE_URL}/users/me`, config)
         .then((res) => {
+          setLoading(false);
           setUrls(res.data.shortenedUrls);
         })
         .catch((err) => {
+          setLoading(false);
           console.log(err);
         });
     }
@@ -77,7 +82,7 @@ export default function ShortenUrlPage() {
           {shortening ? <ThreeDots color={textAccentColor} width='60' /> : 'Encurtar Link'}
         </button>
       </ShortenUrl>
-      <Urls setDeleting={setDeleting} urls={urls} />
+      {loading ? <Loading /> : <Urls setDeleting={setDeleting} urls={urls} />}
     </ShortenUrlContainer>
   );
 }
@@ -87,6 +92,7 @@ const ShortenUrlContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 5rem 2rem 0 2rem;
+  margin-bottom: 3rem;
   @media (min-width: 660px) {
     padding-top: 10rem;
   }

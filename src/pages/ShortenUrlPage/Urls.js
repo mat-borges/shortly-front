@@ -27,14 +27,17 @@ export default function Urls({ setDeleting, urls }) {
       }
     });
   }
+
+  const openUrl = (shortUrl) => window.open(`${process.env.REACT_APP_API_BASE_URL}/urls/open/${shortUrl}`);
+
   return (
     <UrlsContainer>
       {urls?.map((url) => {
         return (
           <li id={url.id} key={url.id}>
             <div>
-              <p>{url.url}</p>
-              <p>{url.shortUrl}</p>
+              <p onClick={() => window.open(url.url)}>{url.url}</p>
+              <p onClick={() => openUrl(url.shortUrl)}>{url.shortUrl}</p>
               <p>Quatidade de Visitantes: {url.visitCount}</p>
             </div>
             <div onClick={() => deleteUrl(url.id)}>
@@ -76,6 +79,15 @@ const UrlsContainer = styled.ul`
       width: 20%;
       border-radius: 0 1rem 1rem 0;
       background-color: ${textAccentColor};
+    }
+  }
+  li > div > p {
+    :first-of-type {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    :nth-child(2) {
+      cursor: pointer;
     }
   }
   @media (min-width: 1000px) {
