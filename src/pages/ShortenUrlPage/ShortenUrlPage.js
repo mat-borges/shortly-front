@@ -36,7 +36,7 @@ export default function ShortenUrlPage() {
           console.log(err);
         });
     }
-  }, [navigate, shortening, deleting]);
+  }, [userInfo, navigate, shortening, deleting]);
 
   function shortenUrl(e) {
     e.preventDefault();
