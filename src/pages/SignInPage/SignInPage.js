@@ -42,12 +42,26 @@ export default function SignInPage() {
       })
       .catch((err) => {
         setSigningIn(false);
+        handleError(err.response);
         console.log(err);
       });
   }
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  function handleError(error) {
+    console.log(error);
+    switch (error?.status) {
+      case 401:
+        swal(`${error.data.message}`, `${error.status} ${error.statusText}`, {
+          icon: 'error',
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   return (

@@ -33,12 +33,55 @@ export default function SignUpPage() {
       })
       .catch((err) => {
         setRegistering(false);
+        handleError(err.response);
         console.log(err);
       });
   }
 
   function handleForm(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  function handleError(error) {
+    switch (error?.status) {
+      case 409:
+        swal(`${error.status} ${error.statusText}`, 'Já existe um usuário cadastrado com esse e-mail!', {
+          icon: 'error',
+        });
+        break;
+      case 422:
+        let text = [];
+        for (const e of error.data.errors) {
+          switch (e.label) {
+            case 'Name':
+              if (!text.includes('Nome: ')) {
+                text.push('Nome: ');
+                text.push(`deve conter pelo menos 3 caracteres \n\n`);
+              }
+              break;
+            case 'Password':
+              if (!text.includes('Senha: ')) {
+                text.push('Senha: ');
+                text.push(
+                  'deve conter pelo menos 8 dígitos entre letras, número e caracteres especiais (@*#!.,$%) \n\n'
+                );
+              }
+              break;
+            case 'Email':
+              if (!text.includes('Email: ')) {
+                text.push('Email: ');
+                text.push('Insira um e-mail válido! \n\n');
+              }
+              break;
+            default:
+              break;
+          }
+        }
+        swal({ text: text.join(''), icon: 'warning' });
+        break;
+      default:
+        break;
+    }
   }
 
   return (

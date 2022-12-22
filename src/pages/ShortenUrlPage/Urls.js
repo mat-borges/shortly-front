@@ -19,6 +19,7 @@ export default function Urls({ setDeleting, urls }) {
           })
           .catch((err) => {
             setDeleting(false);
+            handleError(err);
             console.log(err);
           });
       } else {
@@ -29,6 +30,24 @@ export default function Urls({ setDeleting, urls }) {
   }
 
   const openUrl = (shortUrl) => window.open(`${process.env.REACT_APP_API_BASE_URL}/urls/open/${shortUrl}`);
+
+  function handleError(error) {
+    console.log(error);
+    switch (error?.status) {
+      case 404:
+        swal({ title: `${error.status}: URL Não Encontrada`, icon: 'error' });
+        break;
+      case 401:
+        swal({
+          title: `${error.status}`,
+          text: `Esse usuário não tem autorização para excluir essa entrada!`,
+          icon: 'error',
+        });
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <UrlsContainer>

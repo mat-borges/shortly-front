@@ -58,9 +58,13 @@ export default function ShortenUrlPage() {
   }
 
   function handleError(error) {
+    console.log(error);
     switch (error?.status) {
       case 401:
         swal({ title: `${error.status}: Não Autorizado`, icon: 'error' });
+        break;
+      case 422:
+        swal({ title: `${error.status} ${error.statusText}`, text: `Insira uma URL válida!`, icon: 'error' });
         break;
       default:
         break;
