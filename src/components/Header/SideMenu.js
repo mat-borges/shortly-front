@@ -1,8 +1,8 @@
-import { accentColor, baseColor, detailColor, textAccentColor, textDetailColor } from '../constants/colors.js';
+import { accentColor, baseColor, detailColor, textAccentColor, textDetailColor } from '../../constants/colors.js';
 import { useContext, useState } from 'react';
 
 import { GrMenu } from 'react-icons/gr';
-import UserContext from '../contexts/UserContext.js';
+import UserContext from '../../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
@@ -14,26 +14,28 @@ export default function SideMenuComponent() {
   const { userInfo, setUserInfo } = useContext(UserContext);
 
   function signOut() {
-    // const config = {
-    //   headers: {
-    //     authorization: `Bearer ${userInfo.token}`,
-    //   },
-    // };
-    // swal('Log Out', 'Você tem certeza que deseja deslogar?', 'warning', { buttons: [true, true] }).then((res) => {
-    //   if (res) {
-    //     axios
-    //       .delete(`${process.env.REACT_APP_API_BASE_URL}/sign-out`, config)
-    //       .then((res) => {
-    //         setUserInfo({});
-    //         localStorage.removeItem('userE-geek');
-    //         swal({ text: 'Você foi deslogado com sucesso', icon: 'success' });
-    //       })
-    //       .catch((err) => {
-    //         console.log(err);
-    //       });
-    //     navigate('/');
-    //   }
-    // });
+    const config = {
+      headers: {
+        authorization: `Bearer ${localStorage.token}`,
+      },
+    };
+    setSideMenu(!sideMenu);
+    swal('Log Out', 'Certeza que deseja deslogar?', 'warning', { buttons: [true, true] }).then((res) => {
+      if (res) {
+        axios
+          .delete(`${process.env.REACT_APP_API_BASE_URL}/signOut`, config)
+          .then((res) => {
+            setUserInfo({ loggedIn: false });
+            localStorage.removeItem('token');
+            localStorage.removeItem('name');
+            swal({ text: 'Deslogado com sucesso!', icon: 'success' });
+            navigate('/');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   }
 
   function handleMenu(e) {

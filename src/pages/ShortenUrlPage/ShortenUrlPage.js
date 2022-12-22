@@ -1,9 +1,10 @@
-import { accentColor, detailColor, textAccentColor, textDetailColor } from '../constants/colors';
+import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
 import { useContext, useEffect, useState } from 'react';
 
-import { FaTrashAlt } from 'react-icons/fa';
+import Loading from '../../components/Loading';
 import { ThreeDots } from 'react-loader-spinner';
-import UserContext from '../contexts/UserContext';
+import Urls from './Urls.js';
+import UserContext from '../../contexts/UserContext';
 import axios from 'axios';
 import styled from 'styled-components';
 import swal from 'sweetalert';
@@ -14,12 +15,28 @@ export default function ShortenUrlPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState('');
   const [shortening, setShortening] = useState(false);
+  const [urls, setUrls] = useState([]);
+  const [deleting, setDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!userInfo.loggedIn) {
+    if (!localStorage.token) {
       navigate('/');
+    } else {
+      const config = { headers: { authorization: `Bearer ${localStorage.token}` } };
+      setLoading(true);
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/users/me`, config)
+        .then((res) => {
+          setLoading(false);
+          setUrls(res.data.shortenedUrls);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
     }
-  }, [userInfo.loggedIn, navigate]);
+  }, [navigate, shortening, deleting]);
 
   function shortenUrl(e) {
     e.preventDefault();
@@ -30,6 +47,8 @@ export default function ShortenUrlPage() {
       .post(`${process.env.REACT_APP_API_BASE_URL}/urls/shorten`, body, config)
       .then((res) => {
         setShortening(false);
+        setForm('');
+        swal({ title: 'Link encurtado', text: `Acesse através de: ${res.data.shortUrl}`, icon: 'success' });
       })
       .catch((err) => {
         handleError(err.response);
@@ -48,10 +67,6 @@ export default function ShortenUrlPage() {
     }
   }
 
-  function deleteUrl() {
-    swal({ text: 'Certeza que deseja exluir essa URL?', icon: 'warning', buttons: [true, true] });
-  }
-
   return (
     <ShortenUrlContainer>
       <ShortenUrl onSubmit={shortenUrl}>
@@ -67,38 +82,7 @@ export default function ShortenUrlPage() {
           {shortening ? <ThreeDots color={textAccentColor} width='60' /> : 'Encurtar Link'}
         </button>
       </ShortenUrl>
-      <Urls>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
-      </Urls>
+      {loading ? <Loading /> : <Urls setDeleting={setDeleting} urls={urls} />}
     </ShortenUrlContainer>
   );
 }
@@ -108,6 +92,7 @@ const ShortenUrlContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 5rem 2rem 0 2rem;
+  margin-bottom: 3rem;
   @media (min-width: 660px) {
     padding-top: 10rem;
   }
@@ -164,60 +149,6 @@ const ShortenUrl = styled.form`
       width: 15%;
       margin-top: 0;
       margin-left: 4rem;
-    }
-  }
-`;
-
-const Urls = styled.ul`
-  margin-top: 4rem;
-  overflow-y: auto;
-  height: 40vh;
-  li {
-    display: flex;
-    height: 6rem;
-    margin-bottom: 2rem;
-  }
-  li > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 24px rgba(120, 177, 89, 0.12);
-    :first-of-type {
-      padding: 0 2rem;
-      align-items: flex-start;
-      background-color: ${accentColor};
-      color: ${textAccentColor};
-      width: 80%;
-      display: flex;
-      justify-content: space-around;
-      border-radius: 1rem 0 0 1rem;
-    }
-    :last-of-type {
-      width: 20%;
-      border-radius: 0 1rem 1rem 0;
-      background-color: ${textAccentColor};
-    }
-  }
-  @media (min-width: 1000px) {
-    height: 50vh;
-    li {
-      height: 3rem;
-    }
-    li > div {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      :first-of-type {
-        width: 90%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      :last-of-type {
-        width: 10%;
-      }
     }
   }
 `;

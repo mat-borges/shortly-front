@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 
 import { FaTrophy } from 'react-icons/fa';
-import Loading from '../components/Loading.js';
-import UserContext from '../contexts/UserContext.js';
+import Loading from '../../components/Loading.js';
+import UserContext from '../../contexts/UserContext.js';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -60,6 +60,8 @@ const RankingContainer = styled.div`
   align-items: center;
   width: 100%;
   padding: 70px 2rem 0 2rem;
+  overflow-y: auto;
+  margin-bottom: 4rem;
   @media (min-width: 660px) {
     padding-top: 100px;
   }
