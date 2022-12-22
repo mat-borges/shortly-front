@@ -1,4 +1,4 @@
-import { detailColor, textBaseColor } from '../../constants/colors.js';
+import { baseColor, detailColor, textBaseColor } from '../../constants/colors.js';
 import { useContext, useEffect } from 'react';
 
 import SideMenuComponent from './SideMenu.js';
@@ -31,25 +31,30 @@ export default function Header() {
 
 const HeaderContainer = styled.div`
   display: flex;
-  position: relative;
+  position: sticky;
+  top: 0;
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  height: 100px;
-  margin-top: 2rem;
-  padding: 0 2rem;
+  height: 150px;
+  padding: 2rem;
   font-size: 14px;
+  background-color: ${baseColor};
 `;
 
 const WelcomeText = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   width: 65%;
+  padding: 10px 0;
   color: ${detailColor};
 `;
 
 const LogoBox = styled.div`
   display: flex;
   position: absolute;
-  top: 3rem;
+  top: 5rem;
   right: 0;
   left: 0;
   justify-content: center;
