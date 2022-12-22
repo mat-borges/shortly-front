@@ -31,23 +31,25 @@ export default function RankingPage() {
         <TrophyIcon color='#FFD233' />
         <h1>Ranking</h1>
       </Title>
-      <Rankings>
-        {loading ? (
-          <Loading />
-        ) : (
-          rankings?.map((ranking, i) => {
-            return (
-              <li key={i}>
-                <h2>
-                  {i + 1} . {ranking.name}
-                </h2>
-                <p>- {ranking.linksCount} links</p>
-                <p>- {ranking.visitCount} visualizações</p>
-              </li>
-            );
-          })
-        )}
-      </Rankings>
+      <div>
+        <Rankings>
+          {loading ? (
+            <Loading />
+          ) : (
+            rankings?.map((ranking, i) => {
+              return (
+                <li key={i}>
+                  <h2>
+                    {i + 1} . {ranking.name}
+                  </h2>
+                  <p>- {ranking.linksCount} links</p>
+                  <p>- {ranking.visitCount} visualizações</p>
+                </li>
+              );
+            })
+          )}
+        </Rankings>
+      </div>
       {!userInfo?.loggedIn ? <Register>Crie sua conta para usar nosso serviço!</Register> : <></>}
     </RankingContainer>
   );
@@ -59,11 +61,29 @@ const RankingContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 70px 2rem 0 2rem;
+  margin-bottom: 3rem;
+  padding: 40px 2rem 0 2rem;
   overflow-y: auto;
-  margin-bottom: 4rem;
+  div {
+    :last-of-type {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      height: 50vh;
+      margin-top: 2rem;
+      overflow-y: auto;
+    }
+  }
   @media (min-width: 660px) {
     padding-top: 100px;
+    div {
+      :last-of-type {
+        height: fit-content;
+        max-height: 50vh;
+        margin-top: 4rem;
+      }
+    }
   }
 `;
 
@@ -97,7 +117,6 @@ const Rankings = styled.ul`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 4rem;
   padding-top: 1em;
   border: 1px solid #78b15940;
   border-radius: 2rem 2rem 0 0;
