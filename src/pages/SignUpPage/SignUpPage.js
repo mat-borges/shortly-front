@@ -1,5 +1,6 @@
-import { detailColor, textAccentColor, textDetailColor } from '../../constants/colors';
+import { detailColor, textAccentColor, textBaseColor, textDetailColor } from '../../constants/colors';
 
+import { FiAlertTriangle } from 'react-icons/fi';
 import { ThreeDots } from 'react-loader-spinner';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -11,10 +12,18 @@ export default function SignUpPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [registering, setRegistering] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [validate, setValidate] = useState(true);
 
   function signUp(e) {
     e.preventDefault();
     setRegistering(true);
+    if (form.password !== form.confirmPassword) {
+      setValidate(false);
+      setRegistering(false);
+    } else {
+      setValidate(true);
+    }
     axios
       .post(`${process.env.REACT_APP_API_BASE_URL}/signUp`, form)
       .then((res) => {
@@ -54,7 +63,7 @@ export default function SignUpPage() {
           required
         />
         <input
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           name='password'
           placeholder='Senha'
           value={form.password}
@@ -63,7 +72,7 @@ export default function SignUpPage() {
           required
         />
         <input
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           name='confirmPassword'
           placeholder='Confirmar Senha'
           value={form.confirmPassword}
@@ -71,6 +80,16 @@ export default function SignUpPage() {
           disabled={registering ? 'disabled' : ''}
           required
         />
+        <Password display={validate ? 'none' : 'flex'} backColor={validate === true ? '#fff' : '#fae6e6'}>
+          <div>
+            <FiAlertTriangle color='#ff3333' />
+            <p>As senhas devem ser iguais</p>
+          </div>
+          <div>
+            <input type='checkbox' id='showpassword' onChange={() => setShowPassword(!showPassword)} />
+            <label htmlFor='showpassword'>Show Password</label>
+          </div>
+        </Password>
         <button type='submit' disabled={registering ? 'disabled' : ''}>
           {registering ? <ThreeDots color={textAccentColor} width='60' /> : 'Criar Conta'}
         </button>
@@ -135,5 +154,43 @@ const SignUp = styled.form`
       width: 20%;
       font-size: 0.8rem;
     }
+  }
+`;
+
+const Password = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 1em;
+    margin: 0.3rem;
+    color: ${textBaseColor};
+    input[type='checkbox'] {
+      display: block;
+      height: 1em;
+      width: 1em;
+      margin: 0;
+      margin-right: 10px;
+      box-shadow: none;
+      border: none;
+    }
+    label {
+      font-size: 0.8em;
+    }
+    :first-of-type {
+      display: ${(props) => props.display};
+    }
+    p {
+      display: ${(props) => props.display};
+      margin-left: 5px;
+      font-size: 0.8em;
+    }
+  }
+  @media (min-width: 660px) {
+    width: 80%;
   }
 `;
