@@ -14,12 +14,24 @@ export default function ShortenUrlPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState('');
   const [shortening, setShortening] = useState(false);
+  const [urls, setUrls] = useState([]);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!userInfo.loggedIn) {
       navigate('/');
+    } else {
+      const config = { headers: { authorization: `Bearer ${userInfo.token}` } };
+      axios
+        .get(`${process.env.REACT_APP_API_BASE_URL}/users/me`, config)
+        .then((res) => {
+          setUrls(res.data.shortenedUrls);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-  }, [userInfo.loggedIn, navigate]);
+  }, [userInfo.loggedIn, userInfo.token, navigate, shortening, deleting]);
 
   function shortenUrl(e) {
     e.preventDefault();
@@ -30,6 +42,9 @@ export default function ShortenUrlPage() {
       .post(`${process.env.REACT_APP_API_BASE_URL}/urls/shorten`, body, config)
       .then((res) => {
         setShortening(false);
+        setForm('');
+        console.log(res.data);
+        swal({ title: 'Link encurtado', text: `Acesse através de: ${res.data.shortUrl}`, icon: 'success' });
       })
       .catch((err) => {
         handleError(err.response);
@@ -48,8 +63,26 @@ export default function ShortenUrlPage() {
     }
   }
 
-  function deleteUrl() {
-    swal({ text: 'Certeza que deseja exluir essa URL?', icon: 'warning', buttons: [true, true] });
+  function deleteUrl(id) {
+    const config = { headers: { authorization: `Bearer ${userInfo.token}` } };
+    swal({ text: 'Certeza que deseja exluir essa URL?', icon: 'warning', buttons: [true, true] }).then((res) => {
+      if (res) {
+        setDeleting(true);
+        axios
+          .delete(`${process.env.REACT_APP_API_BASE_URL}/urls/${id}`, config)
+          .then((res) => {
+            setDeleting(false);
+            swal({ title: 'URL deletada com sucesso!', icon: 'success' });
+          })
+          .catch((err) => {
+            setDeleting(false);
+            console.log(err);
+          });
+      } else {
+        setDeleting(false);
+        return;
+      }
+    });
   }
 
   return (
@@ -68,36 +101,20 @@ export default function ShortenUrlPage() {
         </button>
       </ShortenUrl>
       <Urls>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
-        <li>
-          <div>
-            <p>https://www.google.com</p>
-            <p>1234567891012</p>
-            <p>Quatidade de Visitantes: 12.222.222</p>
-          </div>
-          <div onClick={deleteUrl}>
-            <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
-          </div>
-        </li>
+        {urls.map((url) => {
+          return (
+            <li id={url.id} key={url.id}>
+              <div>
+                <p>{url.url}</p>
+                <p>{url.shortUrl}</p>
+                <p>Quatidade de Visitantes: {url.visitCount}</p>
+              </div>
+              <div onClick={() => deleteUrl(url.id)}>
+                <FaTrashAlt size={'1.5rem'} color={'#EA4F4F'} />
+              </div>
+            </li>
+          );
+        })}
       </Urls>
     </ShortenUrlContainer>
   );
